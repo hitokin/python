@@ -3,17 +3,19 @@ import hashlib, string, random, psycopg2, os
 
 login_bp = Blueprint('login', __name__, url_prefix='/login')
 
-
+#DB接続
 def get_connection():
     url = os.environ['DATABASE_URL']
     connection = psycopg2.connect(url)
     return connection
 
+#ソルト取得
 def get_salt():
     charset = string.ascii_letters + string.digits
     salt = '' .join(random.choices(charset, k=30))
     return salt
 
+#ハッシュ取得
 def get_hash(password, salt):
     b_pw = bytes(password, 'utf-8')
     b_salt = bytes(salt, 'utf-8')
@@ -53,7 +55,86 @@ def regist_conf():
     return render_template('regist/regist_execute.html', name=name, mail=mail, hashed_password=hashed_password)
 
 
+#ログイン処理
+def login_process():
+    sql = 'SELECT * FROM users WHERE mail = %s AND password = %s'
+    mail = request.form.get('mail')
+    password = request.form.get('password')
+    
+    try:
+        connection = get_connection()
+        cursor = connection.cursor()
+        cursor.execute(sql, (mail, password))
+        user = cursor.fetchone()
+             
+    except psycopg2.DatabaseError:
+        flg = False
+    finally:
+        cursor.close()
+        connection.close()
+        print(type(user))
+    return flg
+
+
+#パスワード取得
+def get_account_pass(mail):
+    sql = 'SELECT password FROM users WHERE mail = %s'
+    
+    try:
+        connection = get_connection()
+        cursor = connection.cursor()
+        cursor.execute(sql, (mail,))
+        passw = cursor.fetchone()
+        str_pw = str(passw[0])
+        
+        
+    except psycopg2.DatabaseError:
+        flg = False
+    finally:
+        cursor.close()
+        connection.close()
+        
+    return str_pw
+
+#ソルト取得
+def get_account_salt(mail):
+    sql = 'SELECT salt FROM users WHERE mail = %s'
+    
+    try:
+        connection = get_connection()
+        cursor = connection.cursor()
+        cursor.execute(sql, (mail,))
+        salt = cursor.fetchone()
+        str_salt = str(salt[0])
+        
+        
+    except psycopg2.DatabaseError:
+        flg = False
+    finally:
+        cursor.close()
+        connection.close()
+        
+    return str_salt
+
 #ログイン 
 @login_bp.route('/login')
-def login(pw,  mail):
+def login():
     return render_template('login/login.html')
+
+#入力後の画面遷移
+@login_bp.route('/login_exe', methods=['POST'])
+def login_exe():
+    mail = request.form.get('mail')
+    password = request.form.get('password')
+    print('入力パスワード' + password)
+    #データベースからソルト取得
+    salt = get_account_salt(mail)
+    hashed_password = get_hash(password, salt)
+    
+    #データベースからパスワードとソルト取得
+    passw = get_account_pass(mail)
+    if hashed_password == passw :
+        #成功でホーム画面
+        return render_template('home.html', passw=passw, error='成功')
+    else :
+        return render_template('login/login_exe.html', passw=passw, error='失敗')
