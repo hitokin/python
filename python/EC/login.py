@@ -133,8 +133,10 @@ def login_exe():
     
     #データベースからパスワードとソルト取得
     passw = get_account_pass(mail)
-    if hashed_password == passw :
+    if mail == "admin@mail" and hashed_password == passw :
+        return render_template('admin_home.html', passw=passw, error="成功") 
+    elif  hashed_password == passw :
         #成功でホーム画面
         return render_template('home.html', passw=passw, error='成功')
     else :
-        return render_template('login/login_exe.html', passw=passw, error='失敗')
+        return render_template('login/login.html', passw=passw, error='失敗')
