@@ -1,9 +1,11 @@
 from flask import Flask, render_template, url_for, redirect, request
 import psycopg2
 from login import login_bp
+from admin import admin_bp
 app = Flask(__name__)
 
 app.register_blueprint(login_bp)
+app.register_blueprint(admin_bp)
 
 # 最初の画面
 @app.route('/')
@@ -30,3 +32,4 @@ def search():
 
 if __name__ == "__main__":
     app.run(debug=True)
+    
