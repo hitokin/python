@@ -24,7 +24,16 @@
               </div>
             </div>
           </nav>
-    </header>
-    
+          <tbody>
+            {% for product in product_list %}
+            <tr>
+            <form action='' > 
+                <td>{{ product[0] }}</td><br>
+                <td>{{ product[1] }}</td>
+                <td>{{ product[2] }}</td><br>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </header>
 </body>
 </html>
