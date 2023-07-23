@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dpconf</title>
+</head>
+<body>
+    <a>削除しますか？</a>
+    <form action="{{url_for('admin.delete_exe')}}", method='post'>
+        <input type='text' value={{name}} readonly name="name"><br>
+        <input type='text' value={{gold}} readonly name="gold"><br>
+        <input type='text' value={{stack}} readonly name="stack"><br>
+        <button type="submit">削除
+</body>
+</html>

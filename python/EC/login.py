@@ -140,3 +140,17 @@ def login_exe():
         return render_template('home.html', passw=passw, error='成功')
     else :
         return render_template('login/login.html', passw=passw, error='失敗')
+    
+@login_bp.route('/home')
+def move_home():
+    return render_template('admin_home.html')
+
+#ログアウト確認
+@login_bp.route('/logout_conf')
+def logout_conf():
+    return render_template('login/logout_conf.html')
+
+#ログアウト
+@login_bp.route('/logout')
+def logout():
+    return render_template('index.html')

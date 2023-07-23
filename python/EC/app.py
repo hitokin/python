@@ -1,8 +1,9 @@
-from flask import Flask, render_template, url_for, redirect, request
+from flask import Flask,Blueprint,  render_template, url_for, redirect, request
 import psycopg2, os
 from login import login_bp
 from admin import admin_bp
 from user import user_bp
+
 app = Flask(__name__)
 
 app.register_blueprint(login_bp)
@@ -23,18 +24,16 @@ def index():
 
 
 # 商品検索
-@app.route('/search')
+@app.route('/search', methods=['POST'])
 def search():
+    word = request.form.get('word')
     connection = get_connection()
     cursor = connection.cursor()
-    sql = "SELECT * FROM foods WHERE name LIKE %s"
-    key = '%' + key + '%'
-    cursor.execute(sql, (key,))
-
-    rows = cursor.fetchall()
+    sql = "SELECT * FROM product WHERE name LIKE %s"
     
-    result = []
-    return render_template()
+    cursor.execute(sql, (word,))
+    rows = cursor.fetchall()
+    return render_template("search_result.html", rows=rows)
 
 
 #商品表示
