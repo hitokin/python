@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dpexe</title>
+    <title>管理者</title>
 </head>
 <body>
     <a>削除しました</a>
     {% for product in product_list %}
     <tr>
         <td>{{ product[0] }}</td><br>
-        <td>{{ product[1] }}</td>
-        <td>{{ product[2] }}</td><br>
+        <td>{{ product[1] }}円</td>
+        <td>{{ product[2] }}個</td><br>
     </tr>
     {% endfor %}
     <br>

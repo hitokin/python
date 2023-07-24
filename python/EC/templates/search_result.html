@@ -3,10 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>sr</title>
+    <title>検索結果</title>
 </head>
 <body>
-    {{rows}}
+    <a>検索結果</a><br>
+    <br>
+    {% for r in rows %}
+    <tr>
+        <td>{{ r[0] }}</td><br>
+        <td>{{ r[1] }}円</td>
+        <td>{{ r[2] }}個</td><br>
+    </tr>
+    {% endfor %}
+    <br>
     
+    <a href="{{url_for('index')}}">TOPページへ</a>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dp</title>
+    <title>管理者</title>
 </head>
 <body>
     {% for product in product_list %}
@@ -13,8 +13,8 @@
                     <input type="hidden" name="gold" value={{ product[1] }}>
                     <input type="hidden" name="stack" value={{ product[2] }}>
                     <input type="submit" value={{ product[0] }}></td><br>
-                <td>{{ product[1] }}</td>
-                <td>{{ product[2] }}</td><br>
+                <td>{{ product[1] }}円</td>
+                <td>{{ product[2] }}個</td><br>
             </tr>
             {% endfor %}
 </body>

@@ -137,13 +137,18 @@ def login_exe():
         return render_template('admin_home.html', passw=passw, error="成功") 
     elif  hashed_password == passw :
         #成功でホーム画面
-        return render_template('home.html', passw=passw, error='成功')
+        product_list = select_product_list()
+        return render_template('home.html', passw=passw, error='成功', product_list=product_list)
     else :
         return render_template('login/login.html', passw=passw, error='失敗')
     
 @login_bp.route('/home')
 def move_home():
     return render_template('admin_home.html')
+
+@login_bp.route('/index', methods=['POST'])
+def move_index():
+    return render_template('login/login.html')
 
 #ログアウト確認
 @login_bp.route('/logout_conf')
@@ -154,3 +159,19 @@ def logout_conf():
 @login_bp.route('/logout')
 def logout():
     return render_template('index.html')
+
+
+#商品表示
+def select_product_list():
+    sql = "SELECT * FROM product WHERE stack != 0"
+
+    connection = get_connection()
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    product_list = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    print(product_list)
+    print(type(product_list))
+
+    return product_list

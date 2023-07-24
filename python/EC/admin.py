@@ -46,7 +46,8 @@ def ap_exe():
     stack = request.form.get('stack')
     print('ap_exe' + name +gold + stack)
     ap_sql(name, gold, stack)
-    return render_template('admin/add_product_exe.html', name=name, gold=gold, stack=stack)
+    product_list = select_product_list()
+    return render_template('admin/add_product_exe.html', name=name, gold=gold, stack=stack, product_list=product_list)
 
 
 #DBへ追加
@@ -96,7 +97,8 @@ def delete_exe():
     stack = request.form.get('stack')
     print('ap_exe' + name +gold + stack)
     dp_sql(name)
-    return render_template('admin/delete_product_exe.html', name=name, gold=gold, stack=stack)
+    product_list = select_product_list()
+    return render_template('admin/delete_product_exe.html', name=name, gold=gold, stack=stack, product_list=product_list)
 
 
 
@@ -142,7 +144,8 @@ def update_exe():
     stack = request.form.get('stack')
     print('ap_exe' + name +gold + stack)
     up_sql(stack, name)
-    return render_template('admin/update_product_exe.html', name=name, gold=gold, stack=stack)
+    product_list = select_product_list()
+    return render_template('admin/update_product_exe.html', name=name, gold=gold, stack=stack, product_list=product_list)
 
 
 
@@ -165,3 +168,18 @@ def up_sql(stack, name):
         return 0
     else :
         return 
+    
+#商品表示
+def select_product_list():
+    sql = "SELECT * FROM product WHERE stack != 0"
+
+    connection = get_connection()
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    product_list = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    print(product_list)
+    print(type(product_list))
+
+    return product_list
